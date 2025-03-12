@@ -48,7 +48,7 @@ if page == "Football Clustering":
         st.markdown("<div class='title-container'>", unsafe_allow_html=True)
         col1, col2 = st.columns([1, 6])
         with col1:
-            st.image("photos/football.gif")  # Make image bigger
+            st.image("streamlit/photos/football.gif")  # Make image bigger
         with col2:
             st.markdown("<h2 class='animated-title'>Football Player Clustering</h2>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
