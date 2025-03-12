@@ -1,5 +1,5 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 import joblib
 import numpy as np
 import pandas as pd
@@ -10,9 +10,11 @@ app = FastAPI()
 # -------------------------
 # Load trained models
 # -------------------------
-kmeans_model = joblib.load('kmeans.joblib')
-
-preprocessor_kmeans = joblib.load("scaler.joblib")
+try:
+    kmeans_model = joblib.load('kmeans.joblib')
+    preprocessor_kmeans = joblib.load("scaler.joblib")
+except Exception as e:
+    raise RuntimeError(f"Error loading models: {str(e)}")
 
 # -------------------------
 # Define cluster mappings
@@ -28,9 +30,9 @@ cluster_mapping_kmeans = {
 # -------------------------
 
 class InputKMeans(BaseModel):
-    minutes_played: int
-    appearance: int
-    highest_value: int  
+    minutes_played: int = Field(..., gt=0, description="Total minutes played by the player")
+    appearance: int = Field(..., ge=0, description="Total number of appearances")
+    highest_value: int = Field(..., gt=0, description="Highest market value of the player")
 
 # -------------------------
 # Feature Preprocessing Function for K-Means
@@ -54,7 +56,7 @@ def preprocess_kmeans(input_features: InputKMeans):
         return scaled_features
 
     except Exception as e:
-        return {"error": f"Preprocessing error: {str(e)}"}
+        raise HTTPException(status_code=400, detail=f"Preprocessing error: {str(e)}")
 
 # -------------------------
 # K-Means Prediction Endpoint
@@ -68,8 +70,6 @@ async def predict_kmeans(data: InputKMeans):
     try:
         # Preprocess the input
         scaled_input = preprocess_kmeans(data)
-        if isinstance(scaled_input, dict):  # If an error occurs
-            return scaled_input
 
         # Predict cluster
         cluster_label = kmeans_model.predict(scaled_input)[0]
@@ -78,4 +78,4 @@ async def predict_kmeans(data: InputKMeans):
         return {"cluster": int(cluster_label), "cluster_name": cluster_name}
 
     except Exception as e:
-        return {"error": f"An error occurred: {str(e)}"}
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
