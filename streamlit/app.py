@@ -56,14 +56,14 @@ if page == "Football Clustering":
     # Input fields for football features
     minutes_played = st.number_input("Minutes Played:", min_value=0, step=1)
     highest_value = st.number_input("Highest Value:", min_value=0, step=1)
-    goals = st.number_input("Goals:", min_value=0, step=1)
+    appearance = st.number_input("appearance:", min_value=0, step=1)
 
     if st.button("Predict Football Cluster"):
         # Prepare the payload for the API
         payload = {
             "minutes_played": minutes_played,
             "highest_value": highest_value,
-            "goals": goals
+            "appearance": appearance
         }
 
         # API endpoint
