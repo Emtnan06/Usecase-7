@@ -67,7 +67,7 @@ if page == "Football Clustering":
         }
 
         # API endpoint
-        api_url = "https://your-football-api-endpoint.com/predict"
+        api_url = "https://usecase-7-p92x.onrender.com/predict"
 
         # Send request to the API
         try:
