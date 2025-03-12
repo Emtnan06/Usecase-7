@@ -3,6 +3,6 @@ uvicorn
 pydantic
 numpy
 joblib
-scikit-learn==1.3.2
+scikit-learn
 kmodes
 pandas
