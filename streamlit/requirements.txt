@@ -1,6 +1,3 @@
-fastapi
-pydantic
-joblib
-numpy
-uvicorn
-scikit-learn
+streamlit
+pandas
+requests
